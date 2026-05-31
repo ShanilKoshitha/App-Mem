@@ -93,6 +93,34 @@ impl Store{
         }
     }
 
+    pub fn ttl(&mut self, key: &str){
+       
+       let is_expired = match self.map.get(key) {
+            Some(value) =>{
+
+                match value.expires_at {
+                    Some(expires_at) => SystemTime::now() >= expires_at,
+                    None=> false
+                }
+            }
+            None => false
+        };
+
+        if is_expired {
+            self.map.remove(key);
+            println!("(nil)");
+        }else{
+            match self.map.get(key){
+                Some(value) => match value.expires_at{
+                    Some(expires_at)=> println!("Seconds: {:?}",expires_at.duration_since(SystemTime::now())),
+                    None=> println!("(nil)")
+                },
+                None=> println!("(nil)")
+            }
+        }
+        
+    }
+
     pub fn clear(&mut self){
         self.map.clear();
     }

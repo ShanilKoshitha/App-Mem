@@ -7,6 +7,7 @@ pub enum Command{
     Delete(String),
     Exists(String),
     SetEx(String, u64, String),
+    TTL(String),
     List,
     Clear,
     Exit,
@@ -35,6 +36,9 @@ impl Command{
             ["SETEX", key,seconds, value] => {
                 Command::SetEx((*key).to_string(), seconds.parse::<u64>().unwrap(), value.to_string())
             },
+            ["TTL", key] => {
+                Command::TTL((*key).to_string())
+            },
             ["LIST"] => {
                 Command::List
             },
@@ -43,7 +47,7 @@ impl Command{
             },
             ["EXIT"] => {
                 Command::Exit
-            }
+            },
             _ => Command::Unknown
         }
 
@@ -79,6 +83,9 @@ impl Command{
             Command::SetEx(key, seconds,value) => {
                 store.set_ex(key, *seconds, value);
             },
+            Command::TTL(key)=>{
+                store.ttl(key);
+            }
         }
     }
 
