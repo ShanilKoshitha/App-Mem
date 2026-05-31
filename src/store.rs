@@ -121,6 +121,60 @@ impl Store{
         
     }
 
+    pub fn incr(&mut self, key:&str){
+        match self.map.get_mut(key) {
+            
+            Some(entry) => {
+                let current_count = entry.value.parse::<isize>().unwrap();
+                let new_count = current_count + 1;
+
+                entry.value = new_count.to_string();
+                entry.value = new_count.to_string();
+
+                println!("{new_count}");
+            }
+
+            None => {
+                self.map.insert(
+                    key.to_string(),
+                    Entry {
+                        value: "1".to_string(),
+                        expires_at: None,
+                    },
+                );
+
+                println!("1");
+            }
+        }
+    }
+
+    pub fn decr(&mut self, key:&str){
+        match self.map.get_mut(key) {
+            
+            Some(entry) => {
+                let current_count = entry.value.parse::<isize>().unwrap();
+                let new_count = current_count - 1;
+
+                entry.value = new_count.to_string();
+                entry.value = new_count.to_string();
+
+                println!("{new_count}");
+            }
+
+            None => {
+                self.map.insert(
+                    key.to_string(),
+                    Entry {
+                        value: "-1".to_string(),
+                        expires_at: None,
+                    },
+                );
+
+                println!("-1");
+            }
+        }
+    }
+
     pub fn clear(&mut self){
         self.map.clear();
     }

@@ -8,6 +8,8 @@ pub enum Command{
     Exists(String),
     SetEx(String, u64, String),
     TTL(String),
+    INCR(String),
+    DECR(String),
     List,
     Clear,
     Exit,
@@ -38,6 +40,12 @@ impl Command{
             },
             ["TTL", key] => {
                 Command::TTL((*key).to_string())
+            },
+            ["INCR", key] =>{
+                Command::INCR((*key).to_string())
+            },
+            ["DECR", key] =>{
+                Command::DECR((*key).to_string())
             },
             ["LIST"] => {
                 Command::List
@@ -85,7 +93,13 @@ impl Command{
             },
             Command::TTL(key)=>{
                 store.ttl(key);
-            }
+            },
+            Command::INCR(key)=>{
+                store.incr(key);
+            },
+            Command::DECR(key)=>{
+                store.decr(key);
+            },
         }
     }
 
